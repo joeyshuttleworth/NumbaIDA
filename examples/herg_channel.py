@@ -88,10 +88,13 @@ def jac_func(t, cj, y, yp, JJ, p):
     k1, k2, k3, k4 = get_rates(p, V)
 
     # Diagonals first
-    jacobian[0, 0] = -k2 - k3 - cj
-    jacobian[1, 1] = -k2 - k4 - cj
-    jacobian[2, 2] = -k4 - k1 - cj
-    jacobian[3, 3] = -k1 - k3 - cj
+    jacobian[0, 0] = -k2 - k3
+    jacobian[1, 1] = -k2 - k4
+    jacobian[2, 2] = -k4 - k1
+    jacobian[3, 3] = -k1 - k3
+
+    # Subtract cj
+    jacobian -= np.ones((n,n))*cj
 
     # Open state
     jacobian[0, 1] = k4
