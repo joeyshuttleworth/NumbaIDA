@@ -66,7 +66,14 @@
 
 <!--- [![Product Name Screen Shot][product-screenshot]](https://example.com) --->
 
-NumbaIDA is a Python package allowing you to quickly solve DAE problems  in Numba JIT compiled functions using the LLNL SUNDIALS IDA solver.
+NumbaIDA is a Python package allowing you to quickly solve Differential Algebraic Equation (DAE) problems in Numba JIT compiled functions using the LLNL SUNDIALS IDA solver.
+
+DAEs may be thought of a a system of ordinary differential equations (ODEs) with some additional constraints. For example, consider the linear sytem
+
+dx/dt = - a * x + b * y
+dy/dt = - b * y + a * x
+
+with the constaint x + y = 1. In this case, you can rewrite the equation for dx/dt so that it doesn't include any y terms. Alternatively, you can use a solver such as IDA to solve this as a DAE problem. NumbaIDA allows you to use the IDA solver in Python as a JIT compiled function using Numba.
 
 ### Built With
 
@@ -135,6 +142,9 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 ## Known Issues
 1. It is not currently possible to specify a jacobian
 2. `ida_wrapper` is not thread safe! 
+3. SUNDIALS is very flexible and allows a number of linear and nonlinear solvers to be used -- currently it is only possible to use the defaults.
+4. Currently, only dense matrices/vectors may be used 
+5. IT is not yet possible to use one of SUNDIAL's root-finders during the residual calculation
 
 
 <!-- CONTRIBUTING -->
