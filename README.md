@@ -66,7 +66,7 @@
 
 <!--- [![Product Name Screen Shot][product-screenshot]](https://example.com) --->
 
-NumbaIDA is a Python package allowing you to quickly solve Differential Algebraic Equation (DAE) problems in Numba JIT compiled functions using the LLNL SUNDIALS IDA solver.
+NumbaIDA is a Python package allowing you to quickly solve Differential Algebraic Equation (DAE) problems in Numba JIT compiled functions using the LLNL SUNDIALS IDA solver. The code borrows heavilty from [NumbdaLSODA](https://github.com/Nicholaswogan/NumbaLSODA) but uses IDA instead of LSODA (thank you!)
 
 DAEs may be thought of a a system of ordinary differential equations (ODEs) with some additional constraints. For example, consider the linear sytem
 
@@ -206,7 +206,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* [Nicholaswogan's NumbaLSODA package](https://github.com/Nicholaswogan/NumbaLSODA)
+* [Nicholaswogan's NumbaLSODA package](https://github.com/Nicholaswogan/NumbaLSODA) which this package is _heavily_ based on
 * [SUNDIALS](https://github.com/LLNL/sundials)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
