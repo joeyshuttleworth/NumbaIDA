@@ -108,7 +108,7 @@ Next, install 'pip' and 'venv' with:
 
 ### Installation
 
-It is reccomended to install and run 'NumbaIDA' a virtual environment. This can be done by navigating to the root directory (NumbaIDA/ by default) and running:
+It is recommended to install and run 'NumbaIDA' a virtual environment. This can be done by navigating to the root directory (NumbaIDA/ by default) and running:
 
 ```
         python3 -m pip install --upgrade venv
