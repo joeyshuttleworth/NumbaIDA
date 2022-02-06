@@ -143,7 +143,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 ## Known Issues
 1. It is not currently possible to specify a jacobian
 2. `ida_wrapper` is **NOT THREAD SAFE!** 
-3. SUNDIALS is very flexible and allows a number of linear and nonlinear solvers to be used -- currently it is only possible to use the defaults.
+3. SUNDIALS is very flexible and allows a number of linear and nonlinear solvers to be used &ndash; currently it is only possible to use the defaults.
 4. Currently, only dense matrices/vectors may be used 
 5. IT is not yet possible to use one of SUNDIAL's root-finders during the residual calculation
 
