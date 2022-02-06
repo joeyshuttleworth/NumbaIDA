@@ -11,7 +11,6 @@ setup(
     packages=['NumbaIDA'],
     version='0.0.1',
     license='MIT',
-    install_requires=['numpy', 'numba', 'scikit-build'],
     author='Joseph Shuttleworth',
     author_email='joseph.shuttleworth@nottingham.ac.uk',
     description='Python wrapper of IDA (solving DAEs)' +
@@ -20,6 +19,7 @@ setup(
     long_description_content_type='text/markdown',
     python_requires='>3.6',
     make_args=['-DSKBUILD=ON'],
+    install_requires=['numpy', 'numba', 'scikit-build'],
     extras_require={
         'test': [
             'pytest-cov>=2.10',     # For coverage checking
@@ -28,5 +28,5 @@ setup(
             'isort',
             'mock>=3.0.5',         # For mocking command line args etc.
             'codecov>=2.1.3',
-        ],
+        ]}
     )
