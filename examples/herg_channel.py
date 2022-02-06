@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 
-import NumbaIDA
-import numpy as np
-import matplotlib.pyplot as plt
 import os
 
+import matplotlib.pyplot as plt
 import numba
-from numba import njit, cfunc
+import numpy as np
+from numba import cfunc, njit
+
+import NumbaIDA
 
 p = np.array((2.26E-4, 6.99E-2, 3.44E-5, 5.460E-2, 0.0873,
               8.91E-3, 5.15E-3, 0.003158))
+
 
 @njit
 def get_rates(p, V):
@@ -19,6 +21,7 @@ def get_rates(p, V):
         rates[i] = p[2*i] * np.exp(p[2*i + 1] * V * (-1)**(i))
 
     return rates
+
 
 @njit
 def voltage_func(t):

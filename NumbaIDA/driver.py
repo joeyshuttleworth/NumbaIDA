@@ -1,9 +1,10 @@
 import ctypes as ct
 import ctypes.util as util
-from numba import njit, types
-import numpy as np
 import os
 import platform
+
+import numpy as np
+from numba import njit, types
 
 ida_sig = types.void(types.double,
                      types.CPointer(types.double),
