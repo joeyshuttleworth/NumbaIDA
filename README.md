@@ -70,7 +70,8 @@ NumbaIDA is a Python package allowing you to quickly solve Differential Algebrai
 
 DAEs may be thought of a a system of ordinary differential equations (ODEs) with some additional constraints. For example, consider the linear sytem
 
-dx/dt = - a * x + b * y
+dx/dt = - a * x + b * y,
+
 dy/dt = - b * y + a * x
 
 with the constaint x + y = 1. In this case, you can rewrite the equation for dx/dt so that it doesn't include any y terms. Alternatively, you can use a solver such as IDA to solve this as a DAE problem. NumbaIDA allows you to use the IDA solver in Python as a JIT compiled function using Numba.
