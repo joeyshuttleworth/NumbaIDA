@@ -30,6 +30,6 @@ jobs:
     - name: Test sorting with isort
       run: |
         python -m isort --verbose --check-only --diff markov_builder tests setup.py
-    - name: Test with pytest
+    - name: Run example
       run: |
         python examples/herg_channel.py

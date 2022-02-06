@@ -23,13 +23,14 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 set(CMAKE_CXX_STANDARD 11)
 add_library(NumbaIDA SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/NumbaIDA/IDAWrapper.cpp)
-target_link_libraries(NumbaIDA sundials_ida)
+target_link_libraries(NumbaIDA sundials_ida_static)
 
 set_target_properties(NumbaIDA PROPERTIES PREFIX "lib")
 
-# Install library into the directory with driver.py
+# Install libraries into the directory with driver.py
 if (SKBUILD)
   install(TARGETS NumbaIDA DESTINATION NumbaIDA)
 else()
   install(TARGETS NumbaIDA DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/NumbaIDA/)
 endif()
+
