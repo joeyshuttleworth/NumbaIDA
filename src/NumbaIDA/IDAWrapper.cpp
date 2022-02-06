@@ -38,6 +38,7 @@ static int translated_func(realtype t, N_Vector u, N_Vector du, N_Vector resval,
   else
     tmp_func((double) t, (double*) NV_DATA_S(u), (double*) NV_DATA_S(du),
              (double*) NV_DATA_S(resval), (double*) data);
+  return 0;
 }
 
 // static int translated_jacobian_func(realtype tt,  realtype cj,
@@ -91,7 +92,7 @@ extern "C"{
                    double* usol, double rtol,
                    double* avtol, int* success){
 
-    printf("Initialising IDA solver... \n");
+    // printf("Initialising IDA solver... \n");
 
     int retval;
     SUNContext ctx;
@@ -110,7 +111,7 @@ extern "C"{
 
     /* Set user config data */
     retval = IDASetUserData(ida_mem, data);
-    printf("Set user data \n");
+    // printf("Set user data \n");
 
     *success = 1;
 
@@ -122,7 +123,7 @@ extern "C"{
     }
     printf("\n");
 
-    printf("Copied over initial conditions \n");
+    // printf("Copied over initial conditions \n");
 
     double t = teval[0];
     double tout;
@@ -132,7 +133,7 @@ extern "C"{
 
     retval = IDAInit(ida_mem, &translated_func, teval[0], y, dydt);
 
-    printf("Setting tolerances... \n");
+    // printf("Setting tolerances... \n");
 
     N_Vector nvec_avtol;
     nvec_avtol = N_VNew_Serial(neq, ctx);
@@ -160,10 +161,10 @@ extern "C"{
     // retval = IDASetJacFn(ida_mem, jacrob);
     // if(check_retval(&retval, "IDASetJacFn", 1)){*success=-1; return;}
 
-    printf("Running IDA solve... \n");
+    // printf("Running IDA solve... \n");
 
     for (int i = 1; i < nt; i++){
-      printf("Doing integration step %i\n", i);
+      // printf("Doing integration step %i\n", i);
       if (teval[i] < teval[i-1]){
         *success = 0;
         return;
@@ -171,16 +172,16 @@ extern "C"{
 
       tout = teval[i];
 
-      for(int i = 0; i < neq; i++){
-        printf("%f ", NV_Ith_S(y, i));
-      }
-      printf("\n");
+      // for(int i = 0; i < neq; i++){
+      //   printf("%f ", NV_Ith_S(y, i));
+      // }
+      // printf("\n");
 
       /* call integrator */
-      printf("Calling integrator for time %f starting at time %f\n", tout, t);
+      // printf("Calling integrator for time %f starting at time %f\n", tout, t);
       retval = IDASolve(ida_mem, tout, &t, y, dydt, IDA_NORMAL);
 
-      printf("Retval was %i\n", retval);
+      // printf("Retval was %i\n", retval);
       if (retval != 0){
         // there is a problem!
         *success = retval;
@@ -192,5 +193,9 @@ extern "C"{
       }
     }
     IDAFree(&ida_mem);
+
+    /* Ran successfully */
+    *success = 0;
+    return;
   }
 }
