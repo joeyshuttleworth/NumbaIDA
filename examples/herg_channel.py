@@ -3,6 +3,7 @@
 import NumbaIDA
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 import numba
 from numba import njit, cfunc
@@ -64,27 +65,33 @@ def res_func(t: np.float64, u: np.array, du: np.array, res: np.array,
     derivs = f_deriv(t, u_vec, p_vec)
 
     # Set residuals
-    for i in range(3):
+    for i in range(4):
         res[i] = derivs[i] - du[i]
 
-    res[3] = u[0] + u[1] + u[2] + u[3] - 1
+    res[4] = u[0] + u[1] + u[2] + u[3] - 1
 
 
 def main():
+    output_dir = "example_output"
     func_ptr = res_func.address
     u0 = np.array([0, 0, 0, 1], dtype=np.float64)
     du0 = f_deriv(0, u0, p).astype(np.float64)
     print(f"du0 = {du0}")
     print(f"u0 = {u0}")
-    res = np.empty((4,), dtype=np.float64)
-    t_eval = np.linspace(0, 1000, 2000)
+    res = np.empty((5,), dtype=np.float64)
+    t_eval = np.linspace(0, 2000, 20000)
 
     sol, success = NumbaIDA.ida(func_ptr, u0, du0, res, t_eval, p)
 
     print(f"Successful: {success}")
     print(sol)
     plt.plot(t_eval, sol)
-    plt.show()
+    plt.legend(("O", "I", "IC", "C"))
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    plt.savefig(os.path.join(output_dir, "herg_channel_example_plot.png"))
 
 
 if __name__ == "__main__":
