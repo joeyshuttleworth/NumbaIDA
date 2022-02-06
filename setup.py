@@ -3,8 +3,9 @@ from os import path
 from skbuild import setup
 
 this_directory = path.abspath(path.dirname(__file__))
-with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
+
+long_description = "NumbaIDA is a Python package allowing you to quickly solve DAE problems in"\
+    + "Numba JIT compiled functions using the LLNL SUNDIALS IDA solver."
 
 setup(
     name="NumbaIDA",
@@ -30,4 +31,4 @@ setup(
             'codecov>=2.1.3',
             'matplotlib>=3.5.1',
         ]}
-    )
+)

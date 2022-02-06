@@ -19,18 +19,7 @@
  */
 void (*tmp_func)(double, double*, double*, double*, double*);
 
-void (*tmp_jac)(double t, double* y, double * JJ);
-
-
-
-static int jacrob(realtype  /*tt*/,  realtype  /*cj*/,
-           N_Vector  /*yy*/, N_Vector  /*yp*/, N_Vector  /*resvec*/,
-           SUNMatrix  /*JJ*/, void * /*user_data*/,
-           N_Vector  /*tempv1*/, N_Vector  /*tempv2*/, N_Vector  /*tempv3*/)
-{
-  return(0);
-}
-
+void (*tmp_jac)(double, double, double*, double*, double*, double*);
 
 /* Evaluate the users function (if it has been defined) */
 static int translated_func(realtype t, N_Vector u, N_Vector du, N_Vector resval,
@@ -44,16 +33,18 @@ static int translated_func(realtype t, N_Vector u, N_Vector du, N_Vector resval,
   return 0;
 }
 
-// static int translated_jacobian_func(realtype tt,  realtype cj,
-//                                     N_Vector yy, N_Vector yp, N_Vector resvec,
-//                                     SUNMatrix JJ, void *user_data,
-//                                     N_Vector tempv1, N_Vector tempv2, N_Vector tempv3){
-//   if(tmp_jac == nullptr)
-//     return -1;
-//   else{
-//     tmp_jac((double t), (double*) yy->content)
-//   }
-// }
+static int translated_jacobian_func(realtype  tt,  realtype  cj,
+                                    N_Vector yy, N_Vector    yp, N_Vector  /*resvec*/,
+                                    SUNMatrix  JJ, void * user_data,
+                                    N_Vector  /*tempv1*/, N_Vector  /*tempv2*/, N_Vector  /*tempv3*/){
+  if(tmp_jac == nullptr) {
+    return -1;
+}
+
+  tmp_jac(double(tt), double(cj), static_cast<double*>NV_DATA_S(yy), static_cast<double*>NV_DATA_S(yp),
+           static_cast<double*>NV_DATA_S(JJ), static_cast<double*>(user_data));
+  return 0;
+}
 
 
 static int check_retval(void *returnvalue, const char *funcname, int opt)
@@ -90,6 +81,7 @@ extern "C"{
 #include <unistd.h>
 
   void ida_wrapper(void (*F_func)(double, double*, double*, double*, double*),
+                   void (*jac_func)(double, double, double*, double*, double*, double*),
                    int neq, double* u0, const double* du0, double*  /*res*/,
                    double* data, int  /*data_size*/, int nt, const double* teval,
                    double* usol, double rtol,
@@ -131,8 +123,9 @@ extern "C"{
     double t = teval[0];
     double tout = NAN;
 
+    /* Set global function pointers for 'translated functions' */
     tmp_func = F_func;
-    // tmp_jac  = F_jac;
+    tmp_jac  = jac_func;
 
     retval = IDAInit(ida_mem, &translated_func, teval[0], y, dydt);
 
@@ -161,8 +154,11 @@ extern "C"{
     if(check_retval(&retval, "IDASetLinearSolver", 1) != 0){*success = -1; return;}
 
     /* Set the user-supplied Jacobian routine */
-    // retval = IDASetJacFn(ida_mem, jacrob);
-    // if(check_retval(&retval, "IDASetJacFn", 1)){*success=-1; return;}
+    if(jac_func != nullptr)
+      {
+        retval = IDASetJacFn(ida_mem, translated_jacobian_func);
+        if(check_retval(&retval, "IDASetJacFn", 1) != 0){*success=-1; return;}
+      }
 
     // printf("Running IDA solve... \n");
 
