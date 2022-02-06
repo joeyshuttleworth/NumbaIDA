@@ -94,7 +94,7 @@ def jac_func(t, cj, y, yp, JJ, p):
     jacobian[3, 3] = -k1 - k3
 
     # Subtract cj
-    jacobian -= np.eye((n,n))*cj
+    jacobian -= np.eye(n)*cj
 
     # Open state
     jacobian[0, 1] = k4
