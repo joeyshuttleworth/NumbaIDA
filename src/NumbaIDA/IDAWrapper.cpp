@@ -1,8 +1,8 @@
-#include <mutex>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <mutex>
 
 #include <cmath>
 
@@ -23,7 +23,7 @@ void (*tmp_func)(double, double*, double*, double*, double*);
 void (*tmp_jac)(double, double, double*, double*, double*, double*);
 
 /* Mutex to protect tmp_func and tmp_jac from being modified during ida_wrapper call*/
-std::mutex _ida_wrapper_mutex
+std::mutex ida_wrapper_mutex;
 
 /* Evaluate the users function (if it has been defined) */
 static int translated_func(realtype t, N_Vector u, N_Vector du, N_Vector resval,
@@ -128,7 +128,7 @@ extern "C"{
     double tout = NAN;
 
     /* Lock the mutex to protect the global function pointers */
-    std::lock_guard<std::mutex> guard(_ida_wrapper_mutex);
+    std::lock_guard<std::mutex> guard(ida_wrapper_mutex);
 
     /* Set global function pointers for 'translated functions' */
     tmp_func = F_func;
