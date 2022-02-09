@@ -36,10 +36,32 @@ libida = ct.cdll.LoadLibrary(rootdir+name)
 
 # Setup ida_wrapper function from IDAWrapper.cpp
 ida_wrapper = libida.ida_wrapper
-ida_wrapper.argtypes = [ct.c_void_p, ct.c_int, ct.c_void_p, ct.c_void_p,
-                        ct.c_void_p, ct.c_void_p, ct.c_int, ct.c_int,
-                        ct.c_void_p, ct.c_void_p, ct.c_double, ct.c_void_p,
-                        ct.c_void_p]
+ida_wrapper.argtypes = [
+    # F_func
+    ct.c_void_p,
+    # neq
+    ct.c_int,
+    # u0
+    ct.c_void_p,
+    # du0
+    ct.c_void_p,
+    # data
+    ct.c_void_p,
+    # nt
+    ct.c_int,
+    # teval
+    ct.c_int,
+    # usol
+    ct.c_void_p,
+    # rtol
+    ct.c_double,
+    # avtol
+    ct.c_void_p,
+    # success
+    ct.c_void_p,
+    # maxsteps
+    ct.c_int
+]
 
 # Status returned via success parameter
 ida_wrapper.restype = None
@@ -47,20 +69,18 @@ ida_wrapper.restype = None
 
 @njit
 def ida(funcptr, u0, du0, res, t_eval, data=np.array([0.0], np.float64),
-        rtol=1.0e-3, atol=1e-03):
+        rtol=1.0e-3, atol=1e-03, maxsteps=10000):
+
+    ida_success = np.array((2,), np.int32)
 
     avtol = np.full(len(res), atol)
 
     neq = len(u0)
-    print("neq is ", neq)
-    print(u0)
     nt = len(t_eval)
     usol = np.full((nt, neq), np.nan, dtype=np.float64)
-    success = np.array((1,), np.int32)
 
-    ida_wrapper(funcptr, neq, u0.ctypes.data, du0.ctypes.data, res.ctypes.data,
-                data.ctypes.data, len(data), nt, t_eval.ctypes.data,
-                usol.ctypes.data, rtol, avtol.ctypes.data, success.ctypes.data)
+    ida_wrapper(funcptr, neq, u0.ctypes.data, du0.ctypes.data,
+                data.ctypes.data, nt, t_eval.ctypes.data, usol.ctypes.data,
+                rtol, avtol.ctypes.data, ida_success.ctypes.data, maxsteps)
 
-    bool_success = (success[0] == 0)
-    return usol, bool_success
+    return usol, ida_success
