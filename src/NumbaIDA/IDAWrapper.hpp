@@ -14,6 +14,6 @@ extern "C"{
                    void (*jac_func)(double, double, double*, double*, double*, double*),
                    int neq, double* u0, const double* du0, double* res, double* data,
                    int data_size, int nt, const double* teval, double* usol, double rtol,
-                   double* avtol, int* success);
+                   double* avtol, int* success, int maxsteps);
 }
 #endif

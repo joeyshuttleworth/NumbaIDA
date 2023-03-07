@@ -89,7 +89,7 @@ extern "C"{
                    int neq, double* u0, const double* du0, double*  /*res*/,
                    double* data, int  /*data_size*/, int nt, const double* teval,
                    double* usol, double rtol,
-                   double* avtol, int* success){
+                   double* avtol, int* success, int maxsteps){
 
 
     int retval = 0;
@@ -162,7 +162,7 @@ extern "C"{
 
     /* Set max steps */
     retval = IDASetMaxNumSteps(ida_mem, maxsteps);
-    if(check_retval(&retval, "IDASetMaxNumStep", 1) != 0){*success=-1; goto cleanup;}
+    if(maxsteps >=0 && check_retval(&retval, "IDASetMaxNumStep", 1) != 0){*success=-1; goto cleanup;}
 
     for (int i = 1; i < nt; i++){
       // printf("Doing integration step %i\n", i);
