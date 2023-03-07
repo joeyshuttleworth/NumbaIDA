@@ -1,10 +1,5 @@
 cmake_minimum_required(VERSION 3.4.0)
 
-# Breaking lots of rules. We would be breaking less if IDAWrapper.cpp was a C file.
-set(CMAKE_CXX_CLANG_TIDY clang-tidy; -fix-errors; -checks=*,-llvmlibc*,-cppcoreguidelines-avoid-non-const-global-variables,-google_readibility-casting,-modernize-use-trailing-return-type,cppcoreguidelines-pro-type-vararg,hicpp-vararg,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-cstyle-cast,-cppcoreguidelines-pro-type-vararg,hicpp-vararg,-hicpp-vararg)
-
-# set(CMAKE_BUILD_TYPE Debug)
-
 project(NumbaSUNDIALS)
 
 add_subdirectory(sundials)
@@ -31,6 +26,8 @@ set_target_properties(NumbaIDA PROPERTIES PREFIX "lib")
 if (SKBUILD)
   install(TARGETS NumbaIDA DESTINATION NumbaIDA)
 else()
+  # Breaking lots of rules. We would be breaking less if IDAWrapper.cpp was a C file.
+  set(CMAKE_CXX_CLANG_TIDY clang-tidy; -fix-errors; -checks=*,-llvmlibc*,-cppcoreguidelines-avoid-non-const-global-variables,-google_readibility-casting,-modernize-use-trailing-return-type,cppcoreguidelines-pro-type-vararg,hicpp-vararg,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-cstyle-cast,-cppcoreguidelines-pro-type-vararg,hicpp-vararg,-hicpp-vararg)
   install(TARGETS NumbaIDA DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/NumbaIDA/)
 endif()
 
