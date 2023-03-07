@@ -54,12 +54,8 @@ ida_wrapper.argtypes = [
     ct.c_void_p,
     # du0
     ct.c_void_p,
-    # res
-    ct.c_void_p,
     # data
     ct.c_void_p,
-    # data_size
-    ct.c_int,
     # nt
     ct.c_int,
     # t_eval
@@ -86,18 +82,15 @@ def ida(func_ptr, u0, du0, nres, t_eval, data=np.array([0.0], np.float64),
     # Setup vector or absolute tolerances (one per residual)
     avtol = np.full(nres, atol)
 
-    # Setup residual vector
-    res = np.empty((nres,), dtype=np.float64)
-
     neq = len(u0)
     nt = len(t_eval)
     usol = np.full((nt, neq), np.nan, dtype=np.float64)
     success = np.array((1,), np.int32)
 
     ida_wrapper(func_ptr, jac_ptr, neq, u0.ctypes.data, du0.ctypes.data,
-                res.ctypes.data, data.ctypes.data, len(data), nt,
-                t_eval.ctypes.data, usol.ctypes.data, rtol, avtol.ctypes.data,
-                success.ctypes.data, nmaxsteps)
+                data.ctypes.data, nt, t_eval.ctypes.data,
+                usol.ctypes.data, rtol, avtol.ctypes.data, success.ctypes.data,
+                nmaxsteps)
 
     bool_success = (success[0] == 0)
     return usol, bool_success
