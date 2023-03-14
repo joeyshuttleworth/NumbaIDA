@@ -118,9 +118,9 @@ extern "C"{
       NV_Ith_S(y, i) = u0[i];
       NV_Ith_S(dydt, i) = du0[i];
       usol[i] = u0[i];
-      printf("%f ", u0[i]);
+      // printf("%f ", u0[i]);
     }
-    printf("\n");
+    // printf("\n");
 
     // printf("Copied over initial conditions \n");
 
