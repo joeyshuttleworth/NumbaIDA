@@ -132,9 +132,6 @@ def main():
     print(f"du0 = {du0}")
     print(f"u0 = {u0}")
 
-    # Setup residual vector
-    res = np.empty((5,), dtype=np.float64)
-
     t_eval = np.linspace(0, 2000, 20000)
 
     nres = 5

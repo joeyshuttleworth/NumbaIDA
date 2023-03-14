@@ -91,9 +91,8 @@ extern "C"{
                    int neq, const double* u0, const double* du0,
                    double* data, int nt, const double* teval,
                    double* usol, double rtol,
-                   double* avtol, int* success){
+                   double* avtol, int* success, int maxsteps){
 
-    // printf("Initialising IDA solver... \n");
 
     int retval = 0;
     SUNContext ctx = nullptr;
@@ -111,7 +110,7 @@ extern "C"{
     N_Vector dydt = N_VNew_Serial(neq, ctx);
 
     /* Set user config data */
-    retval = IDASetUserData(ida_mem, data);
+    retval = IDASetUserData(ida_mem, &data);
     // printf("Set user data \n");
 
     *success = 1;
@@ -122,9 +121,6 @@ extern "C"{
       usol[i] = u0[i];
       // printf("%f ", u0[i]);
     }
-    // printf("\n");
-
-    // printf("Copied over initial conditions \n");
 
     double t = teval[0];
     double tout = NAN;
@@ -147,8 +143,7 @@ extern "C"{
 
     // printf("Setting tolerances... \n");
 
-    N_Vector nvec_avtol = nullptr;
-    nvec_avtol = N_VNew_Serial(neq, ctx);
+    N_Vector nvec_avtol = N_VNew_Serial(neq, ctx);
     NV_DATA_S(nvec_avtol) = avtol;
 
     retval = IDASVtolerances(ida_mem, rtol, nvec_avtol);
@@ -159,15 +154,15 @@ extern "C"{
 
     /* Create dense SUNMatrix for use in linear solves */
     SUNMatrix A = SUNDenseMatrix(neq, neq, ctx);
-    if(check_retval((void *)A, "SUNDenseMatrix", 0) != 0){*success = -1; return;}
+    SUNLinearSolver LS = SUNLinSol_Dense(y, A, ctx);
+    if(check_retval((void *)A, "SUNDenseMatrix", 0) != 0){*success = -1; goto cleanup;}
 
     /* Create dense SUNLinearSolver object */
-    SUNLinearSolver LS = SUNLinSol_Dense(y, A, ctx);
-    if(check_retval((void *)LS, "SUNLinSol_Dense", 0) != 0){*success = -1; return;}
+    if(check_retval((void *)LS, "SUNLinSol_Dense", 0) != 0){*success = -1; goto cleanup;}
 
     /* Attach the matrix and linear solver */
     retval = IDASetLinearSolver(ida_mem, LS, A);
-    if(check_retval(&retval, "IDASetLinearSolver", 1) != 0){*success = -1; return;}
+    if(check_retval(&retval, "IDASetLinearSolver", 1) != 0){*success = -1; goto cleanup;}
 
     /* Set the user-supplied Jacobian routine */
     if(jac_func != nullptr)
@@ -176,7 +171,9 @@ extern "C"{
         if(check_retval(&retval, "IDASetJacFn", 1) != 0){*success=-1; return;}
       }
 
-    // printf("Running IDA solve... \n");
+    /* Set max steps */
+    retval = IDASetMaxNumSteps(ida_mem, maxsteps);
+    if(maxsteps >=0 && check_retval(&retval, "IDASetMaxNumStep", 1) != 0){*success=-1; goto cleanup;}
 
     for (int i = 1; i < nt; i++){
       // printf("Doing integration step %i\n", i);
@@ -187,16 +184,8 @@ extern "C"{
 
       tout = teval[i];
 
-      // for(int i = 0; i < neq; i++){
-      //   printf("%f ", NV_Ith_S(y, i));
-      // }
-      // printf("\n");
-
-      /* call integrator */
-      // printf("Calling integrator for time %f starting at time %f\n", tout, t);
       retval = IDASolve(ida_mem, tout, &t, y, dydt, IDA_NORMAL);
 
-      // printf("Retval was %i\n", retval);
       if (retval != 0){
         // there is a problem!
         *success = retval;
@@ -207,9 +196,14 @@ extern "C"{
         usol[j + neq*i] = NV_Ith_S(y, j);
       }
     }
-    IDAFree(&ida_mem);
-
     /* Ran successfully */
     *success = 0;
- }
+
+  cleanup:
+    IDAFree(&ida_mem);
+
+    /* Free vectors */
+    N_VDestroy(y);
+    N_VDestroy(dydt);
+}
 }

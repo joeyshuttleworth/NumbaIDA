@@ -44,9 +44,9 @@ libida = ct.cdll.LoadLibrary(rootdir+name)
 # Setup ida_wrapper function from IDAWrapper.cpp
 ida_wrapper = libida.ida_wrapper
 ida_wrapper.argtypes = [
-    # F_func
+    # func_ptr
     ct.c_void_p,
-    # jac_func
+    # jac_ptr
     ct.c_void_p,
     # neq
     ct.c_int,
@@ -58,7 +58,7 @@ ida_wrapper.argtypes = [
     ct.c_void_p,
     # nt
     ct.c_int,
-    # teval
+    # t_eval
     ct.c_void_p,
     # usol
     ct.c_void_p,
@@ -67,15 +67,17 @@ ida_wrapper.argtypes = [
     # avtol
     ct.c_void_p,
     # success
-    ct.c_void_p]
+    ct.c_void_p,
+    # nmaxsteps
+    ct.c_int]
 
 # Status returned via success parameter
 ida_wrapper.restype = None
 
 
 @njit
-def ida(func_ptr, u0, du0, t_eval, data=np.array([0.0], np.float64),
-        rtol=1.0e-3, atol=1e-03, jac_ptr=0):
+def ida(func_ptr, u0, du0, nres, t_eval, data=np.array([0.0], np.float64),
+        rtol=1.0e-3, atol=1e-03, jac_ptr=0, nmaxsteps=-1):
 
     neq = len(u0)
     assert(len(u0) == len(du0))
@@ -90,7 +92,7 @@ def ida(func_ptr, u0, du0, t_eval, data=np.array([0.0], np.float64),
     ida_wrapper(func_ptr, jac_ptr, neq, u0.ctypes.data, du0.ctypes.data,
                 data.ctypes.data, nt,
                 t_eval.ctypes.data, usol.ctypes.data, rtol, avtol.ctypes.data,
-                success.ctypes.data)
+                success.ctypes.data, nmaxsteps)
 
     bool_success = (success[0] == 0)
     return usol, bool_success
