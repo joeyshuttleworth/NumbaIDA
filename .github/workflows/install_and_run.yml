@@ -33,7 +33,7 @@ jobs:
         python -m isort --verbose --check-only --diff NumbaIDA/*.py tests/*.py setup.py examples/*.py
     - name: Run tests
       run: |
-        python -m pytest
+        python -m pytest .
     - name: Run example
       run: |
         python examples/herg_channel.py
