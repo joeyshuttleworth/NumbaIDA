@@ -1,5 +1,4 @@
 import ctypes as ct
-import ctypes.util as util
 import os
 import platform
 
@@ -76,23 +75,22 @@ ida_wrapper.restype = None
 
 
 @njit
-def ida(func_ptr, u0, du0, nres, t_eval, data=np.array([0.0], np.float64),
+def ida(func_ptr, u0, du0, t_eval, data=np.array([0.0], float),
         rtol=1.0e-3, atol=1e-03, jac_ptr=0, nmaxsteps=-1):
 
     neq = len(u0)
-    assert(len(u0) == len(du0))
+    assert len(u0) == len(du0)
 
     # Setup vector or absolute tolerances (one per residual)
     avtol = np.full(neq, atol)
 
     nt = len(t_eval)
-    usol = np.full((nt, neq), np.nan, dtype=np.float64)
+    usol = np.full((nt, neq), np.nan, dtype=float).flatten()
     success = np.array((1,), np.int32)
 
     ida_wrapper(func_ptr, jac_ptr, neq, u0.ctypes.data, du0.ctypes.data,
-                data.ctypes.data, nt,
-                t_eval.ctypes.data, usol.ctypes.data, rtol, avtol.ctypes.data,
-                success.ctypes.data, nmaxsteps)
+                data.ctypes.data, nt, t_eval.ctypes.data, usol.ctypes.data,
+                rtol, avtol.ctypes.data, success.ctypes.data, nmaxsteps)
 
     bool_success = (success[0] == 0)
-    return usol, bool_success
+    return usol.reshape(nt, neq), bool_success
