@@ -26,7 +26,7 @@ ida_jac_sig = types.void(types.double,
                          )
 
 # Load NumbaIDA library
-rootdir = os.path.dirname(os.path.realpath(__file__))+'/'
+rootdir = os.path.dirname(os.path.realpath(__file__))
 
 # Get wrapper library
 lib_name = "libNumbaIDA"
@@ -38,7 +38,7 @@ else:
     ext = ".dylib"
 
 name = lib_name + ext
-libida = ct.cdll.LoadLibrary(rootdir+name)
+libida = ct.cdll.LoadLibrary(os.path.join(rootdir, name))
 
 # Setup ida_wrapper function from IDAWrapper.cpp
 ida_wrapper = libida.ida_wrapper

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.4.0)
 
-project(NumbaSUNDIALS)
+project(NumbaIDA)
 
 add_subdirectory(sundials)
 
