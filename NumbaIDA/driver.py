@@ -28,6 +28,9 @@ ida_jac_sig = types.void(types.double,
 # Load NumbaIDA library
 rootdir = os.path.dirname(os.path.realpath(__file__))
 
+print(rootdir)
+print(os.listdir())
+
 # Get wrapper library
 lib_name = "libNumbaIDA"
 if platform.uname()[0] == "Windows":
