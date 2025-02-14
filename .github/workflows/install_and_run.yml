@@ -29,12 +29,15 @@ jobs:
         python -m pip install pytest flake8
     - name: Run tests
       run: |
+        . .venv/bin/activate
         python -m pytest .
     - name: Run example
       run: |
+        . .venv/bin/activate
         python examples/herg_channel.py
     - name: Lint with flake8
       run: |
+        . .venv/bin/activate
         python -m flake8 NumbaIDA/*.py tests/*.py setup.py examples/*.py
     - name: Test sorting with isort
       run: |
