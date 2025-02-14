@@ -33,3 +33,6 @@ jobs:
     - name: Run example
       run: |
         python examples/herg_channel.py
+    - name: Run tests
+      run: |
+        python -m pytest
