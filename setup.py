@@ -8,8 +8,8 @@ long_description = "NumbaIDA is a Python package allowing you to quickly solve D
     + "Numba JIT compiled functions using the LLNL SUNDIALS IDA solver."
 
 setup(
-    name="NumbaIDA",
-    packages=['NumbaIDA'],
+    name="numbaida",
+    packages=['numbaida'],
     version='0.0.1',
     license='MIT',
     author='Joseph Shuttleworth',
@@ -26,6 +26,7 @@ setup(
             'pytest-cov>=2.10',     # For coverage checking
             'pytest>=4.6',          # For unit tests
             'flake8>=3',            # For code style checking
+            'matplotlib',
             'isort',
             'mock>=3.0.5',         # For mocking command line args etc.
             'codecov>=2.1.3',

@@ -7,7 +7,7 @@ import numba
 import numpy as np
 from numba import cfunc, njit
 
-import NumbaIDA
+import numbaida
 
 # Parameters / user_data
 p = np.array((2.26E-4, 6.99E-2, 3.44E-5, 5.460E-2, 0.0873,
@@ -57,7 +57,7 @@ def f_deriv(t, u, p):
 
 # Use X = (O I IC C)^T
 # Define residual function
-@cfunc(NumbaIDA.ida_sig)
+@cfunc(numbaida.ida_sig)
 def res_func(t: np.float64, u: np.array, du: np.array, res: np.array,
              p: np.array):
 
@@ -112,7 +112,7 @@ def _jac_func(p, V):
     return jacobian
 
 
-@cfunc(NumbaIDA.ida_jac_sig)
+@cfunc(numbaida.ida_jac_sig)
 def jac_func(t, cj, y, yp, JJ, p):
     jacobian = numba.carray(JJ, (5, 5))
     p = numba.carray(p, 8).copy()
@@ -143,7 +143,7 @@ class TestHergModel(unittest.TestCase):
     def test_solve(self):
         t_eval = np.linspace(0, 2000, 20000)
 
-        sol, succ = NumbaIDA.ida(
+        sol, succ = numbaida.ida(
             self.func_ptr, self.u0, self.du0, t_eval, data=p.copy(),
             jac_ptr=self.jac_ptr
         )
@@ -154,7 +154,7 @@ class TestHergModel(unittest.TestCase):
         plt.plot(t_eval, sol)
         plt.legend(["O", "I", "IC", "C"])
 
-        sol, succ = NumbaIDA.ida(
+        sol, succ = numbaida.ida(
             self.func_ptr, self.u0, self.du0, t_eval, data=p.copy(),
             jac_ptr=self.jac_ptr
         )

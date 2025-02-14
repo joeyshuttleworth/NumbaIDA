@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import os
 
 import matplotlib.pyplot as plt
@@ -7,7 +5,7 @@ import numba
 import numpy as np
 from numba import cfunc, njit
 
-import NumbaIDA
+import numbaida
 
 # Parameters / user_data
 p = np.array((2.26E-4, 6.99E-2, 3.44E-5, 5.460E-2, 0.0873,
