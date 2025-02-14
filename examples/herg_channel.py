@@ -54,7 +54,7 @@ def f_deriv(t, u, p):
 
 
 # Define residual function
-@cfunc(NumbaIDA.ida_sig)
+@cfunc(numbaida.ida_sig)
 def res_func(t: np.float64, u: np.array, du: np.array, res: np.array,
              p: np.array):
 
@@ -109,7 +109,7 @@ def _jac_func(p, V):
     return jacobian
 
 
-@cfunc(NumbaIDA.ida_jac_sig)
+@cfunc(numbaida.ida_jac_sig)
 def jac_func(t, cj, y, yp, JJ, p):
     jacobian = numba.carray(JJ, (5, 5))
     p = numba.carray(p, 8).copy()
@@ -137,7 +137,7 @@ def main():
 
     t_eval = np.linspace(0, 2000, 20000)
 
-    sol, _ = NumbaIDA.ida(
+    sol, _ = numbaida.ida(
         func_ptr, u0, du0, t_eval, data=p.copy(),
         jac_ptr=jac_ptr
     )
