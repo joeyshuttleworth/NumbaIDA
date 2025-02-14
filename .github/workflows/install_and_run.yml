@@ -24,10 +24,10 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install scikit-build
         python -m pip install .[test]
-        python -m pip install pytest
+        python -m pip install pytest flake8
     - name: Lint with flake8
       run: |
-        python -m flake8 --verbose --diff NumbaIDA/*.py tests/*.py setup.py examples/*.py
+        python -m flake8 NumbaIDA/*.py tests/*.py setup.py examples/*.py
     - name: Test sorting with isort
       run: |
         python -m isort --verbose --check-only --diff NumbaIDA/*.py tests/*.py setup.py examples/*.py
