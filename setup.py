@@ -9,7 +9,7 @@ long_description = "NumbaIDA is a Python package allowing you to quickly solve D
 
 setup(
     name="numbaida",
-    packages=['NumbaIDA'],
+    packages=["numbaida"],
     version='0.0.1',
     license='MIT',
     author='Joseph Shuttleworth',
