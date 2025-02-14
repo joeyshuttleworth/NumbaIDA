@@ -29,7 +29,7 @@ ida_jac_sig = types.void(types.double,
 rootdir = os.path.dirname(os.path.realpath(__file__))
 
 print(rootdir)
-print(os.listdir())
+print(os.listdir(rootdir))
 print(__file__)
 
 # Get wrapper library
