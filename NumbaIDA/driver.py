@@ -30,6 +30,7 @@ rootdir = os.path.dirname(os.path.realpath(__file__))
 
 print(rootdir)
 print(os.listdir())
+print(__file__)
 
 # Get wrapper library
 lib_name = "libNumbaIDA"
