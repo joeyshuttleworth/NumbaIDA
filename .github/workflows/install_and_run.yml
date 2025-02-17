@@ -30,7 +30,6 @@ jobs:
         python examples/herg_channel.py
     - name: Lint with flake8
       run: |
-        . .venv/bin/activate
         python -m flake8 numbaida/*.py tests/*.py setup.py examples/*.py
     - name: Test sorting with isort
       run: |
