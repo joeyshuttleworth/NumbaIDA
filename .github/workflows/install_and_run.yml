@@ -33,7 +33,6 @@ jobs:
         cd tests
         python -m pip install .[test]
         python -m pytest . --import-mode=importlib
-    - name: Run example
     - name: Lint with flake8
       run: |
         . .venv/bin/activate
