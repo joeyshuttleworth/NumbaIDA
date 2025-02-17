@@ -21,24 +21,20 @@ jobs:
         sudo apt-get install -y gcc cmake build-essential clang-tidy
     - name: Install dependencies
       run: |
-        python -m venv .venv
-        . .venv/bin/activate
         python -m pip install --upgrade pip
         python -m pip install scikit-build
-        python -m pip install .[test]
+        python -m pip install -e .[test] --use-pep517
         python -m pip install pytest flake8
     - name: Run tests
       run: |
-        . .venv/bin/activate
         python -m pytest .
     - name: Run example
       run: |
-        . .venv/bin/activate
         python examples/herg_channel.py
     - name: Lint with flake8
       run: |
         . .venv/bin/activate
-        python -m flake8 NumbaIDA/*.py tests/*.py setup.py examples/*.py
+        python -m flake8 numbaida/*.py tests/*.py setup.py examples/*.py
     - name: Test sorting with isort
       run: |
-        # python -m isort --verbose --check-only --diff NumbaIDA/*.py tests/*.py setup.py examples/*.py
+        python -m isort --verbose --check-only --diff NumbaIDA/*.py tests/*.py setup.py examples/*.py
