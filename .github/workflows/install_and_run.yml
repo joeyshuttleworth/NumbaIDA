@@ -25,13 +25,15 @@ jobs:
         python -m pip install scikit-build
         python -m pip install .[test]
         python -m pip install pytest flake8
-    - name: Run tests
-      run: |
-        cd tests
-        python -m pytest . --import-mode=importlib
     - name: Run example
       run: |
         python examples/herg_channel.py
+    - name: Run tests
+      run: |
+        cd tests
+        python -m pip install .[test]
+        python -m pytest . --import-mode=importlib
+    - name: Run example
     - name: Lint with flake8
       run: |
         . .venv/bin/activate
