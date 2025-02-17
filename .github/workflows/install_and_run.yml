@@ -23,11 +23,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install scikit-build
-        python -m pip install -e .[test]
+        python -m pip install .[test]
         python -m pip install pytest flake8
     - name: Run tests
       run: |
-        python -m pytest .
+        cd tests
+        python -m pytest . --import-mode=importlib
     - name: Run example
       run: |
         python examples/herg_channel.py
