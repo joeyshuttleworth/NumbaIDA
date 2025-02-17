@@ -24,7 +24,7 @@ set_target_properties(NumbaIDA PROPERTIES PREFIX "lib")
 
 # Install libraries into the directory with driver.py
 if (SKBUILD)
-  install(TARGETS NumbaIDA DESTINATION NumbaIDA)
+  install(TARGETS NumbaIDA DESTINATION numbaida)
 else()
   # Breaking lots of rules. We would be breaking less if IDAWrapper.cpp was a C file.
   set(CMAKE_CXX_CLANG_TIDY clang-tidy; -fix-errors; -checks=*,-llvmlibc*,-cppcoreguidelines-avoid-non-const-global-variables,-google_readibility-casting,-modernize-use-trailing-return-type,cppcoreguidelines-pro-type-vararg,hicpp-vararg,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-cstyle-cast,-cppcoreguidelines-pro-type-vararg,hicpp-vararg,-hicpp-vararg)
