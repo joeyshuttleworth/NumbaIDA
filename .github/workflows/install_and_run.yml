@@ -28,11 +28,6 @@ jobs:
     - name: Run example
       run: |
         python examples/herg_channel.py
-    - name: Run tests
-      run: |
-        cd tests
-        python -m pip install .[test]
-        python -m pytest . --import-mode=importlib
     - name: Lint with flake8
       run: |
         . .venv/bin/activate
@@ -40,3 +35,8 @@ jobs:
     - name: Test sorting with isort
       run: |
         python -m isort --verbose --check-only --diff NumbaIDA/*.py tests/*.py setup.py examples/*.py
+    - name: Run tests
+      run: |
+        cd tests
+        python -m pip install .[test]
+        python -m pytest . --import-mode=importlib
