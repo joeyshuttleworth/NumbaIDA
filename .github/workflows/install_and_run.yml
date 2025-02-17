@@ -36,6 +36,6 @@ jobs:
         python -m isort --verbose --check-only --diff NumbaIDA/*.py tests/*.py setup.py examples/*.py
     - name: Run tests
       run: |
-        cd tests
         python -m pip install .[test]
+        cd tests
         python -m pytest . --import-mode=importlib
