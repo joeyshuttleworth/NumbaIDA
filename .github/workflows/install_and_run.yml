@@ -33,7 +33,7 @@ jobs:
         python -m flake8 numbaida/*.py tests/*.py setup.py examples/*.py
     - name: Test sorting with isort
       run: |
-        python -m isort --verbose --check-only --diff NumbaIDA/*.py tests/*.py setup.py examples/*.py
+        python -m isort --verbose --check-only --diff numbaida/*.py tests/*.py setup.py examples/*.py
     - name: Run tests
       run: |
         python -m pip install .[test]
